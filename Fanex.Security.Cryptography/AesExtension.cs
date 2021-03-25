@@ -8,6 +8,7 @@ namespace Fanex.Cryptography.Aes
     /// <summary>
     /// Aes algorithm class for encryption and decryption with unicode characters.
     /// </summary>
+    [Obsolete("Please change to use AesService class instead.")]
     public static class AesExtension
     {
         /// <summary>
