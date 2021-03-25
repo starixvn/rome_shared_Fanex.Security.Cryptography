@@ -1,10 +1,10 @@
 ﻿$(document).ready(function () {
     changePwd();
-    $('#secret').on('keyup,cut,paste', function () {
+    $('#secret').on('keyup cut paste', function () {
         changePwd();
     });
 
-    $('#plainText').on('keyup,cut,paste', function () {
+    $('#plainText').on('keyup cut paste', function () {
         changePwd();
     });
 });

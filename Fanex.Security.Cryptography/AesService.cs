@@ -6,7 +6,7 @@ using System.Text;
 namespace Fanex.Cryptography.Aes
 {
     /// <summary>
-    /// AEA Service to encrypt and decrept.
+    /// AES Service to encrypt and decrypt.
     /// </summary>
     public interface IAesService
     {
@@ -33,7 +33,7 @@ namespace Fanex.Cryptography.Aes
     }
 
     /// <summary>
-    /// AEA Service to encrypt and decrept.
+    /// AES Service to encrypt and decrypt.
     /// </summary>
     public class AesService : IAesService
     {
@@ -41,6 +41,11 @@ namespace Fanex.Cryptography.Aes
         /// Default vector key to encrypt and decrypt.
         /// </summary>
         public const string DefaultVectorKey = "a5s8d2e9c172";
+
+        /// <summary>
+        /// Default current instance of IAesService.
+        /// </summary>
+        public static IAesService Default => new AesService(DefaultVectorKey);
 
         /// <summary>
         /// Gets vector key.

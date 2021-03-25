@@ -13,8 +13,8 @@ namespace Fanex.Cryptography.Aes.Site
         {
             var secretKey = "1234";
             var plainText = "1234aaAA朝鮮凌晨發射";
-            var encrypted = AesExtension.Encrypt(plainText, secretKey);
-            var decrypted = AesExtension.Decrypt(encrypted, secretKey);
+            var encrypted = AesService.Default.Encrypt(plainText, secretKey);
+            var decrypted = AesService.Default.Decrypt(encrypted, secretKey);
 
             if (decrypted == plainText)
             {
