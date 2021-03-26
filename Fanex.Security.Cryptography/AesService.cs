@@ -37,6 +37,8 @@ namespace Fanex.Cryptography.Aes
     /// </summary>
     public class AesService : IAesService
     {
+        private static IAesService aesService;
+
         /// <summary>
         /// Default vector key to encrypt and decrypt.
         /// </summary>
@@ -45,7 +47,7 @@ namespace Fanex.Cryptography.Aes
         /// <summary>
         /// Default current instance of IAesService.
         /// </summary>
-        public static IAesService Default => new AesService(DefaultVectorKey);
+        public static IAesService Default => aesService = aesService ?? new AesService(DefaultVectorKey);
 
         /// <summary>
         /// Gets vector key.
@@ -56,7 +58,7 @@ namespace Fanex.Cryptography.Aes
         /// Initializes an instance of <see cref="AesService" /> class.
         /// </summary>
         /// <param name="defaultVectorKey">A vector key with 12 characters.</param>
-        public AesService(string defaultVectorKey)
+        public AesService(string defaultVectorKey = null)
         {
             if (!string.IsNullOrWhiteSpace(defaultVectorKey) && defaultVectorKey.Length != 12)
             {
@@ -74,18 +76,26 @@ namespace Fanex.Cryptography.Aes
         /// <returns>Plain text.</returns>
         public string Decrypt(string cipherText, string secretKey)
         {
+
             if (string.IsNullOrWhiteSpace(secretKey) || secretKey.Length != 4)
             {
                 throw new ArgumentOutOfRangeException($"{nameof(secretKey)}: must be 4 characters");
             }
 
-            var key = Encoding.UTF8.GetBytes(VectorKey + secretKey);
-            var iv = key;
+            try
+            {
+                var key = Encoding.UTF8.GetBytes(VectorKey + secretKey);
+                var iv = key;
 
-            var encrypted = Convert.FromBase64String(cipherText.Replace(" ", "+"));
-            var decrypted = DecryptStringFromBytes(encrypted, key, iv);
+                var encrypted = Convert.FromBase64String(cipherText.Replace(" ", "+"));
+                var decrypted = DecryptStringFromBytes(encrypted, key, iv);
 
-            return decrypted;
+                return decrypted;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -101,11 +111,18 @@ namespace Fanex.Cryptography.Aes
                 throw new ArgumentOutOfRangeException($"{nameof(secretKey)}: must be 4 characters");
             }
 
-            var key = Encoding.UTF8.GetBytes(VectorKey + secretKey);
-            var iv = key;
-            var decrypted = EncryptStringToBytes(plainText, key, iv);
+            try
+            {
+                var key = Encoding.UTF8.GetBytes(VectorKey + secretKey);
+                var iv = key;
+                var decrypted = EncryptStringToBytes(plainText, key, iv);
 
-            return Convert.ToBase64String(decrypted);
+                return Convert.ToBase64String(decrypted);
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private string DecryptStringFromBytes(byte[] cipherText, byte[] key, byte[] iv)
